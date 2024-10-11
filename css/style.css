@@ -1,0 +1,11 @@
+body {
+    font-family: "Inter";
+  }
+
+.btn {
+    background-color: #3498db; /* Default button color */
+  }
+
+  .btn.active {
+    background-color: #e74c3c; /* Active button color */
+  }

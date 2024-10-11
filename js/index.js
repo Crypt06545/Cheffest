@@ -21,34 +21,51 @@ const loadBtnCategory = async () => {
 // Create category buttons
 const createCategoryBtn = (foods) => {
   const btnContainer = document.querySelector("#button-container");
+  btnContainer.innerHTML = ""; // Clear existing buttons
+
   foods.forEach((item) => {
     // Only create button if the category is not "Pork"
     if (item.strCategory !== "Pork") {
       const createBtn = `
-        <button onclick="loadBtnCategoryFood('${item.strCategory}')" class="btn border-b-4 rounded-xl text-white">${item.strCategory}</button>
+        <button id="btn-${item.strCategory}" onclick="handleButtonClick('${item.strCategory}')" 
+        class="btn border-b-4 rounded-xl text-white bg-gray-800 hover:bg-gray-700 active:bg-[#E6533C] p-2 mx-1">
+          ${item.strCategory}
+        </button>
       `;
       btnContainer.innerHTML += createBtn;
     }
   });
 };
 
-// load btn category foord 
+// Handle button click
+const handleButtonClick = (category) => {
+  const buttons = document.querySelectorAll("#button-container button");
+  buttons.forEach((btn) => {
+    btn.classList.remove("bg-[#E6533C]");
+    btn.classList.add("bg-gray-800");
+  });
+  const activeBtn = document.querySelector(`#btn-${category}`);
+  activeBtn.classList.add("bg-[#E6533C]");
+  activeBtn.classList.remove("bg-gray-800");
+
+  loadBtnCategoryFood(category);
+};
+
+// load btn category foord
 const loadBtnCategoryFood = async (btnCategoryfood) => {
   try {
     const uri = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${btnCategoryfood}`;
     const response = await fetch(uri);
     const data = await response.json();
-    console.log(data);
-    
+    // console.log(data);
+
     createCategoryFoodCard(data.meals);
   } catch (error) {
     console.log(error);
   }
 };
 
-
-
-// create category foodCard 
+// create category foodCard
 const createCategoryFoodCard = (meals) => {
   const foodContainer = document.querySelector("#food-card-container");
   foodContainer.innerHTML = "";
@@ -83,12 +100,7 @@ const createCategoryFoodCard = (meals) => {
   });
 };
 
-
-
-
-
-
-// Load all foodd data 
+// Load all foodd data
 const loadAllFoods = async (status) => {
   try {
     const uri = `https://www.themealdb.com/api/json/v1/1/categories.php`;
